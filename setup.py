@@ -1,10 +1,4 @@
-try:
-    import minify.command
-    minify_js = minify.command.minify_js
-    minify_css = minify.command.minify_css
-except ImportError:
-    minify_js = None
-    minify_css = None
+# -*- coding: utf-8 -*-
 
 try:
     from setuptools import setup

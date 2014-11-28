@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# pylint: disable=dangerous-default-value, star-args
 '''
 Created on Nov 28, 2014
 
@@ -12,6 +14,32 @@ import tornado.ioloop
 import tornado.web
 
 from glob import glob
+
+def __load_modules__(modules_names):
+    """
+    Dynamically load modules, related to a plugin
+    """
+    modules = {}
+    for name in modules_names:
+        try:
+            modules[name] = importlib.import_module(name)
+        except ImportError:
+            sys.stderr.write("Unable to import {0}.".format(name))
+    return modules
+
+def __load_plugin__(plugin_dir):
+    """
+    Load plugin
+    """
+    plugin_config = os.path.join(plugin_dir, 'plugin.json')
+    with open(plugin_config, 'r') as conf_fd:
+        config = json.load(conf_fd)
+        modules = __load_modules__(config['modules'])
+        handlers = [(r'{0}'.format(uri), getattr(modules[mod], cls_name))
+                    for (uri, [mod, cls_name]) in
+                    [(handler['uri'], handler['class'].rsplit('.', 1))
+                     for handler in config['handlers']]]
+        return handlers
 
 class Application(tornado.web.Application):
     """
@@ -29,7 +57,7 @@ class Application(tornado.web.Application):
         sys.path.append(lib_path)
         plugins = glob(os.path.join(plugins_path, '*'))
         for plugin_dir in plugins:
-            handlers += self.load_plugin(plugin_dir)
+            handlers += __load_plugin__(plugin_dir)
         static_path = os.path.join(plugins_path, 'static')
         templates_path = os.path.join(plugins_path, 'templates')
         settings['static_path'] = static_path
@@ -37,32 +65,6 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(self, handlers,
                                           autoescape=None,
                                           **settings)
-
-    def __load_modules__(self, modules_names):
-        """
-        Dynamically load modules, related to a plugin
-        """
-        modules = {}
-        for name in modules_names:
-            try:
-                modules[name] = importlib.import_module(name)
-            except ImportError:
-                sys.stderr.write("Unable to import {0}.".format(name))
-        return modules
-
-    def load_plugin(self, plugin_dir):
-        """
-        Load plugin
-        """
-        plugin_config = os.path.join(plugin_dir, 'plugin.json')
-        with open(plugin_config, 'r') as conf_fd:
-            config = json.load(conf_fd)
-            modules = self.__load_modules__(config['modules'])
-            handlers = [(r'{0}'.format(uri), getattr(modules[mod], cls_name))
-                        for (uri, [mod, cls_name]) in
-                        [(handler['uri'], handler['class'].rsplit('.', 1))
-                         for handler in config['handlers']]]
-            return handlers
 
 def run(application, port=8080, address="0.0.0.0"):
     """
