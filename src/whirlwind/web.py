@@ -55,7 +55,7 @@ class Application(tornado.web.Application):
         handlers = []
         lib_path = os.path.join(plugins_path, 'lib')
         sys.path.append(lib_path)
-        plugins = glob(os.path.join(plugins_path, '*'))
+        plugins = glob(os.path.join(lib_path, '*'))
         for plugin_dir in plugins:
             handlers += __load_plugin__(plugin_dir)
         static_path = os.path.join(plugins_path, 'static')
