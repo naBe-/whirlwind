@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=dangerous-default-value, star-args
 '''
 Created on Nov 28, 2014
 
@@ -48,11 +47,13 @@ class Application(tornado.web.Application):
     You should provide plugins path for your application
     as well as a settings dictionary.
     """
-    def __init__(self, plugins_path='.', settings={}):
+    def __init__(self, plugins_path='.', settings=None):
         """
         Constructor
         """
         self.plugins_path = plugins_path
+        if settings is None:
+            settings = {}
         handlers = []
         lib_path = os.path.join(plugins_path, 'lib')
         sys.path.append(lib_path)
