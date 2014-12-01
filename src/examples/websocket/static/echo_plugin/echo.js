@@ -14,6 +14,7 @@ window.onload = function() {
         }
         ws_uri += "//"+loc.host;
         ws_uri += loc.pathname+'echows'
+        var message = document.getElementById("message")
         var ws = new WebSocket(ws_uri);
         ws.onopen = function() {
             log.innerHTML += "Connection open...<br>"
@@ -22,9 +23,9 @@ window.onload = function() {
             log.innerHTML += evt.data+"<br>"
         };
         ws.onclose = function() {
-            log.innerHTML += "Connection closed!<br>"
+            log.innerHTML += "Connection closed! Refresh this page to reconnect or click <a href=\"#\" onclick=\"window.location.reload()\">here</a>.<br>"
+            message.style.display='none'
         };
-        var message = document.getElementById("message")
         message.onkeydown = function(evt) {
             if(evt.keyCode == 13) {
                 ws.send(message.value)
