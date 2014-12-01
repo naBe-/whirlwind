@@ -62,9 +62,9 @@ class Application(tornado.web.Application):
         templates_path = os.path.join(plugins_path, 'templates')
         settings['static_path'] = static_path
         settings['templates_path'] = templates_path
-        super(Application, self).__init__(self, handlers,
-                                          autoescape=None,
-                                          **settings)
+        tornado.web.Application.__init__(self, handlers,
+                                         autoescape=None,
+                                         **settings)
 
 def run(application, port=8080, address="0.0.0.0"):
     """
