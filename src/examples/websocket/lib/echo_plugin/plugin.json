@@ -1,0 +1,7 @@
+{
+    "modules" : ["echo_plugin.websocket"],
+    "handlers" : [
+                 ["/", "echo_plugin.websocket.EchoHandler"],
+                 ["/echows", "echo_plugin.websocket.EchoWebSocket"]
+                 ]
+}

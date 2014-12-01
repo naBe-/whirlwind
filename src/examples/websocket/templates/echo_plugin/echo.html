@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Websocket echo server</title>
+        <script type="text/javascript" src="/static/echo_plugin/echo.js"></script>
+    </head>
+    <body>
+        <p><div id="log"></div></p>
+        <p><input type="text" id="message" onkeydown="if (event.keyCode == 13) { submit(this); return false; }"></p>
+        <p>Web page generated at: <i>{{ generation_timestamp }}</i></p>
+    </body>
+</html>

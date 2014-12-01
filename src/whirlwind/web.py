@@ -61,9 +61,9 @@ class Application(tornado.web.Application):
         for plugin_dir in plugins:
             handlers += __load_plugin__(plugin_dir)
         static_path = os.path.join(plugins_path, 'static')
-        templates_path = os.path.join(plugins_path, 'templates')
+        template_path = os.path.join(plugins_path, 'templates')
         settings['static_path'] = static_path
-        settings['templates_path'] = templates_path
+        settings['template_path'] = template_path
         tornado.web.Application.__init__(self, handlers,
                                          autoescape=None,
                                          **settings)
