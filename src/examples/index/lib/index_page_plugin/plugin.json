@@ -1,0 +1,6 @@
+{
+    "modules" : ["index_page_plugin.index"],
+    "handlers" : [
+                 ["/", "index_page_plugin.index.IndexHandler"]
+                 ]
+}

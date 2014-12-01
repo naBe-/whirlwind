@@ -25,7 +25,7 @@ def __load_modules__(modules_names):
         try:
             modules[name] = importlib.import_module(name)
         except ImportError:
-            sys.stderr.write("Unable to import {0}.".format(name))
+            sys.stderr.write("Unable to import {0}.\n".format(name))
     return modules
 
 def __load_plugin__(plugin_dir):
@@ -38,7 +38,7 @@ def __load_plugin__(plugin_dir):
         modules = __load_modules__(config['modules'])
         handlers = [(r'{0}'.format(uri), getattr(modules[mod], cls_name))
                     for (uri, [mod, cls_name]) in
-                    [(handler['uri'], handler['class'].rsplit('.', 1))
+                    [(handler[0], handler[1].rsplit('.', 1))
                      for handler in config['handlers']]]
         return handlers
 
